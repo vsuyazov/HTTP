@@ -29,10 +29,10 @@ public class CatFacts {
 
     @Override
     public String toString() {
-        return "id:" + id +
-                " text:" + text + '\'' +
-                " type:'" + type + '\'' +
-                " user:'" + name + '\'' +
-                " upvotes:" + upvotes;
+        return "id: " + id +
+                " text: " + text + '\'' +
+                " type: " + type + '\'' +
+                " user: " + name + '\'' +
+                " upvotes: " + upvotes;
     }
 }

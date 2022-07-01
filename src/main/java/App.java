@@ -17,28 +17,30 @@ public class App {
     private final static String URL = "https://raw.githubusercontent.com/netology-code/jd-homeworks/master/http/task1/cats";
     public static final ObjectMapper mapper = new ObjectMapper();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
-        CloseableHttpClient httpClient = HttpClientBuilder.create()
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create()
                 .setDefaultRequestConfig(RequestConfig.custom()
                         .setConnectTimeout(5000)
                         .setSocketTimeout(30000)
                         .setRedirectsEnabled(false)
                         .build())
-                .build();
+                .build()) {
 
-        HttpGet request = new HttpGet(URL);
-        request.setHeader(HttpHeaders.ACCEPT, HttpHeaders.CONTENT_TYPE);
+            HttpGet request = new HttpGet(URL);
+            request.setHeader(HttpHeaders.ACCEPT, HttpHeaders.CONTENT_TYPE);
 
-        CloseableHttpResponse response = httpClient.execute(request);
+            CloseableHttpResponse response = httpClient.execute(request);
 
-        System.out.println(response.getStatusLine().getStatusCode());
-        Arrays.stream(response.getAllHeaders()).forEach(System.out::println);
+            System.out.println(response.getStatusLine().getStatusCode());
+            Arrays.stream(response.getAllHeaders()).forEach(System.out::println);
 
-        List<CatFacts> facts = mapper.readValue(response.getEntity().getContent(), new TypeReference<>() {
-        });
-        facts.stream().filter(value -> value.getUpvotes() != 0 && value.getUpvotes() > 0)
-                .forEach(System.out::println);
+            List<CatFacts> facts = mapper.readValue(response.getEntity().getContent(), new TypeReference<>() {
+            });
+            facts.stream().filter(value -> value.getUpvotes() != 0 && value.getUpvotes() > 0)
+                    .forEach(System.out::println);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
-
 }
